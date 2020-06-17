@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.driverclicker.R
 
-class MenuTwo: Fragment() {
+class MenuFour: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.menu2, container, false)
+        return inflater.inflate(R.layout.menu4, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

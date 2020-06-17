@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BlankFragment"
+    tools:context=".ActionPanelFragment"
     android:background="@android:color/holo_blue_dark"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:id="@+id/action_panel">
 
     <Button
         android:id="@+id/button_1"
@@ -19,10 +20,12 @@
         android:layout_height="wrap_content"
         android:text="2"/>
     <Button
+        android:id="@+id/button_3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="3"/>
     <Button
+        android:id="@+id/button_4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="4"/>
