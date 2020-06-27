@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.example.driverclicker.MainActivity
 import com.example.driverclicker.R
 import kotlinx.android.synthetic.main.menu.*
-
 
 class Menu: Fragment(), View.OnClickListener{
     lateinit var pref: SharedPreferences
@@ -29,13 +29,13 @@ class Menu: Fragment(), View.OnClickListener{
         super.onViewCreated(view, savedInstanceState)
 
         var ac=activity
-        var button = ac?.findViewById<Button>(R.id.button_1)
+//        var button = ac?.findViewById<Button>(R.id.button_1)
 //        button?.isClickable=false
         if(ac!=null) pref = ac.getSharedPreferences("save", Context.MODE_PRIVATE)
         var money = pref.getInt("money", 0)
         var textView = ac?.findViewById<TextView>(R.id.text_money)
         big_button.setOnClickListener {
-            money++
+            money+2
             textView?.text=money.toString()
             val editor=pref.edit()
             editor.putInt("money", money)
@@ -44,14 +44,14 @@ class Menu: Fragment(), View.OnClickListener{
     }
 
     override fun onClick(v: View?) {
-
+        MainActivity().moneyPlus()
         TODO("Not yet implemented")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         var ac = activity
-        var button = ac?.findViewById<Button>(R.id.button_1)
+//        var button = ac?.findViewById<Button>(R.id.button_1)
 //        button?.isClickable=true
     }
 
