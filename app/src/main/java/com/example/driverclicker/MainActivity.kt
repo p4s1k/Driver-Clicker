@@ -87,12 +87,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     }
     @SuppressLint("SetTextI18n")
     fun moneyPlus(){
-        profile.money=pref.getInt(MONEY,0)
+//        profile.money=pref.getInt(MONEY,0)
         profile.money+=profile.income
         text_money.text="Деньги "+profile.money.toString()
-        val editor=pref.edit()
-        editor.putInt(MONEY, profile.money)
-        editor.apply()
+//        val editor=pref.edit()
+//        editor.putInt(MONEY, profile.money)
+//        editor.apply()
     }
     @SuppressLint("SetTextI18n")
 
