@@ -24,8 +24,7 @@ class MenuTwo: Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         big_button2.setOnClickListener {
-            (context as
-                    qqMainActivity).moneyPlus()
+            (context as MainActivity).moneyPlus()
         }
     }
 
