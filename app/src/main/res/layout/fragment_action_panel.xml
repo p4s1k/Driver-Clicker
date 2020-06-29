@@ -4,26 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ActionPanelFragment"
-    android:background="@android:color/holo_blue_dark"
+    android:background="#efede2"
     android:gravity="center_horizontal"
     android:id="@+id/action_panel">
 
-    <Button
+    <ImageView
         android:id="@+id/button_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"/>
-
-    <Button
+        android:src="@drawable/heart_icon2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+    <ImageView
         android:id="@+id/button_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2"/>
-    <Button
+        android:src="@drawable/hunger_icon2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
+    <ImageView
         android:id="@+id/button_3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="3"/>
+        android:src="@drawable/mood_icon2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"/>
     <Button
         android:id="@+id/button_4"
         android:layout_width="wrap_content"

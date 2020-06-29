@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.driverclicker.MainActivity
 import com.example.driverclicker.R
+import kotlinx.android.synthetic.main.menu.*
 import kotlinx.android.synthetic.main.menu2.*
 
 
@@ -23,10 +24,12 @@ class MenuTwo: Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        big_button2.setOnClickListener {
-            (context as MainActivity).moneyPlus()
-        }
-    }
+        val cont = (context as MainActivity)
+        big_button2.setOnClickListener{
+            cont.setStats(-5,0, "health")
+            cont.setStats(1,10, "hunger")
+            cont.setStats(-5,0, "mood")
+    }}
 
     override fun onClick(v: View?) {
         TODO("Not yet implemented")

@@ -1,6 +1,5 @@
 package com.example.driverclicker
 
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,7 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_status_panel.*
-import kotlinx.android.synthetic.main.menu2.*
+import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener{
@@ -21,23 +20,58 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     val LVL ="level"
     val SKILL = "skill"
     val STEP = "step"
+    val HEALTH = "health"
+    val HUNGER = "hunger"
+    val MOOD = "mood"
     lateinit var pref: SharedPreferences
-    val profile = Profile(0, "pizza", 1, 0, 0, 800)
-
+    val profile = Profile(0, "pizza", 1, 0, 0, 800, 100, 100, 100 )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         pref = getSharedPreferences(SAVE, Context.MODE_PRIVATE)
         image_car.setOnClickListener(this)
-        taxi2.setOnClickListener(this)
-        pizza2.setOnClickListener(this)
         checkProfession()
         progressCheck()
         loadMoney()
-
+        loadStats()
     }
 
+    private fun loadStats() {
+        profile.health=pref.getInt(HEALTH, 100)
+        profile.hunger=pref.getInt(HUNGER, 100)
+        profile.mood=pref.getInt(MOOD, 100)
+        health_bar.progress = profile.health
+        hunger_bar.progress = profile.hunger
+        mood_bar.progress = profile.mood
+    }
+    private fun saveStats(){
+        val editor=pref.edit()
+        editor.putInt(HEALTH, profile.health)
+        editor.putInt(HUNGER, profile.hunger)
+        editor.putInt(MOOD, profile.mood)
+        editor.apply()
+    }
+     fun setStats(a: Int, b:Int, string: String){
+         val c=(a..b).random()
+        when(string){
+            HEALTH -> {
+                profile.health+=c
+                if(profile.health<0) profile.health=0
+                if(profile.health>100) profile.health=100
+                health_bar.progress=profile.health}
+            HUNGER -> {
+                profile.hunger=profile.hunger+c
+                if(profile.hunger<0) profile.hunger=0
+                if(profile.hunger>100) profile.hunger=100
+                hunger_bar.progress=profile.hunger}
+            MOOD -> {
+                profile.mood=profile.mood+c
+                if(profile.mood<0) profile.mood=0
+                if(profile.mood>100) profile.mood=100
+                mood_bar.progress=profile.mood}
+        }
+    }
 
 
     @SuppressLint("SetTextI18n")
@@ -78,10 +112,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
             when(v.id){
                 R.id.image_car ->{
                     moneyPlus()
-                    progressUp()}
-                R.id.taxi2->changeProfession("taxi")
-                R.id.pizza2->changeProfession("pizza")
+                    progressUp()
+                    setStats(-10, 0, HEALTH)
+                    setStats(-10, 0, HUNGER)
+                    setStats(-10, 0,MOOD)
+                }
                 R.id.big_button2->moneyPlus()
+
             }
         }
     }
@@ -128,7 +165,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     override fun onStop() {
         val editor=pref.edit()
         editor.putInt(MONEY, profile.money)
+        editor.putString(PROFESSION, profile.profession)
+        editor.putInt(LVL, profile.lvl)
+        editor.putInt(SKILL, profile.skill)
+        editor.putInt(STEP, profile.step)
+
         editor.apply()
+        saveStats()
         super.onStop()
     }
 

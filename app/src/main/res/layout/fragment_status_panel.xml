@@ -5,53 +5,49 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FragmentStatusPanel"
-    android:background="@android:color/holo_blue_dark"
+    android:background="#efede2"
     >
 
-    <Button
-        android:id="@+id/taxi2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        app:layout_constraintEnd_toStartOf="@+id/pizza2"
+    <ImageView
+        android:id="@+id/heart_icon_top"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:contentDescription="heart"
+        android:src="@drawable/heart_icon2"
+        app:layout_constraintEnd_toStartOf="@+id/health_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/pizza2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="2"
-        app:layout_constraintEnd_toStartOf="@+id/button3"
-        app:layout_constraintStart_toEndOf="@+id/taxi2"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/hunger_icon_top"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:src="@drawable/hunger_icon2"
+        app:layout_constraintBottom_toBottomOf="@+id/heart_icon_top"
+        app:layout_constraintEnd_toStartOf="@+id/hunger_bar"
+        app:layout_constraintStart_toEndOf="@+id/health_bar"
+        app:layout_constraintTop_toTopOf="@+id/heart_icon_top" />
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="3"
-        app:layout_constraintEnd_toStartOf="@+id/button4"
-        app:layout_constraintStart_toEndOf="@+id/pizza2"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button3"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/mood_icon_top"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:src="@drawable/mood_icon2"
+        app:layout_constraintBottom_toBottomOf="@+id/hunger_icon_top"
+        app:layout_constraintEnd_toStartOf="@+id/mood_bar"
+        app:layout_constraintStart_toEndOf="@+id/hunger_bar"
+        app:layout_constraintTop_toTopOf="@+id/hunger_icon_top"
+        android:contentDescription="TODO" />
 
     <TextView
         android:id="@+id/text_money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/heart_icon_top" />
 
     <TextView
         android:id="@+id/text_lvl"
@@ -60,6 +56,7 @@
         android:layout_marginStart="30dp"
         android:text="Ур. 0"
         app:layout_constraintBottom_toBottomOf="@+id/experience_bar"
+        app:layout_constraintEnd_toStartOf="@+id/experience_bar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/experience_bar" />
 
@@ -68,13 +65,47 @@
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
         android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
         android:max="80000"
         android:progressBackgroundTint="@color/colorPrimaryDark"
         android:progressTint="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/text_lvl"
         app:layout_constraintTop_toBottomOf="@+id/text_money"
         tools:ignore="MissingConstraints" />
+
+    <ProgressBar
+        android:id="@+id/health_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/heart_icon_top"
+        app:layout_constraintEnd_toStartOf="@+id/hunger_icon_top"
+        app:layout_constraintStart_toEndOf="@+id/heart_icon_top"
+        app:layout_constraintTop_toTopOf="@+id/heart_icon_top" />
+
+    <ProgressBar
+        android:id="@+id/hunger_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/hunger_icon_top"
+        app:layout_constraintEnd_toStartOf="@+id/mood_icon_top"
+        app:layout_constraintStart_toEndOf="@+id/hunger_icon_top"
+        app:layout_constraintTop_toTopOf="@+id/hunger_icon_top" />
+
+    <ProgressBar
+        android:id="@+id/mood_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mood_icon_top"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/mood_icon_top"
+        app:layout_constraintTop_toTopOf="@+id/mood_icon_top" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
