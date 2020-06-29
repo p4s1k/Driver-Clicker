@@ -3,6 +3,7 @@ package com.example.driverclicker
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_status_panel.*
 import kotlin.random.Random
+import android.media.SoundPool as SoundPool
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener{
@@ -25,7 +27,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     val MOOD = "mood"
     lateinit var pref: SharedPreferences
     val profile = Profile(0, "pizza", 1, 0, 0, 800, 100, 100, 100 )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         progressCheck()
         loadMoney()
         loadStats()
+
     }
 
     private fun loadStats() {
@@ -116,9 +118,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                     setStats(-10, 0, HEALTH)
                     setStats(-10, 0, HUNGER)
                     setStats(-10, 0,MOOD)
-                }
-                R.id.big_button2->moneyPlus()
 
+                }
             }
         }
     }
