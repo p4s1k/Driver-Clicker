@@ -33,7 +33,7 @@ class ActionPanelFragment: Fragment(), View.OnClickListener {
         val f1 = Menu()
         val f2 = MenuTwo()
         val f3 = MenuThree()
-        val f4 = ItemFragment()
+        val f4 = MenuFour()
         fun fragmentContainerCrate(){
             if (ac!=null){
                 ac.supportFragmentManager

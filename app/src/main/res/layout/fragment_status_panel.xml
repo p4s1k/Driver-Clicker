@@ -55,6 +55,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:text="Ур. 0"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/experience_bar"
         app:layout_constraintEnd_toStartOf="@+id/experience_bar"
         app:layout_constraintStart_toStartOf="parent"

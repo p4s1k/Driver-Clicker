@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     val profile = Profile(0, "pizza", 1, 0, 0, 800, 100, 100, 100 )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        window.decorView.systemUiVisibility=View.SYSTEM_UI_FLAG_FULLSCREEN
         setContentView(R.layout.activity_main)
         pref = getSharedPreferences(SAVE, Context.MODE_PRIVATE)
         image_car.setOnClickListener(this)
