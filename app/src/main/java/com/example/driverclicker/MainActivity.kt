@@ -1,21 +1,20 @@
 package com.example.driverclicker
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.SharedPreferences
-import android.media.MediaPlayer
+import android.content.*
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_status_panel.*
-import kotlin.random.Random
-import android.media.SoundPool as SoundPool
 
 
 class MainActivity : AppCompatActivity(), View.OnClickListener{
+    val BROAD = "com.example.driverclicker"
     val SAVE="save"
     val MONEY="money"
     val PROFESSION ="profession"
@@ -25,10 +24,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     val HEALTH = "health"
     val HUNGER = "hunger"
     val MOOD = "mood"
+    val SERVICESTEP = "servicestep"
     lateinit var pref: SharedPreferences
-    val profile = Profile(0, "pizza", 1, 0, 0, 800, 100, 100, 100 )
+    val profile = Profile(0, "pizza", 1, 0, 0, 800, 100, 100, 100, 5 )
+
+    var br: BroadcastReceiver? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        startMyService()
+        Log.i("MYTAG", "onCreate")
         window.decorView.systemUiVisibility=View.SYSTEM_UI_FLAG_FULLSCREEN
         setContentView(R.layout.activity_main)
         pref = getSharedPreferences(SAVE, Context.MODE_PRIVATE)
@@ -37,7 +41,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         progressCheck()
         loadMoney()
         loadStats()
+        loadSteps()
+        setStep()
 
+        br = object : BroadcastReceiver(){
+            override fun onReceive(context: Context?, intent: Intent?) {
+                val serviceSteps = intent?.getIntExtra("step", 0)
+                if (serviceSteps != null) {
+                    steps_bar.progress=serviceSteps
+                    if(steps_bar.progress==10){
+//                        loadSteps()
+                        profile.steps+=1
+//                        val editor=pref.edit()
+//                        editor.putInt(SERVICESTEP, profile.steps)
+//                        editor.apply()
+                        setStep()
+                        steps_bar.progress=0
+                    }
+                }
+            }
+        }
+        val infilter = IntentFilter(BROAD)
+        registerReceiver(br, infilter)
     }
 
     private fun loadStats() {
@@ -74,6 +99,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
                 if(profile.mood>100) profile.mood=100
                 mood_bar.progress=profile.mood}
         }
+    }
+
+    fun loadSteps(){profile.steps = pref.getInt(SERVICESTEP,5)}
+    fun setStep(){text_step.text=profile.steps.toString()
+    Log.i("MYTAG", "Отрисовывает ${profile.steps}")}
+
+    fun step(){
+        if (profile.steps>0){
+            Log.i("MYTAG", "клик, шаг отнимется и сохранится ${profile.steps}")
+            profile.steps-= 1
+            val editor=pref.edit()
+            editor.putInt(SERVICESTEP, profile.steps)
+            editor.apply()
+            setStep()
+
+        }
+        Log.i("MYTAG", "клик, шаг отнялcя и сохранился ${profile.steps}")
+        startMyService()
     }
 
 
@@ -114,12 +157,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         if (v != null) {
             when(v.id){
                 R.id.image_car ->{
-                    moneyPlus()
-                    progressUp()
-                    setStats(-10, 0, HEALTH)
-                    setStats(-10, 0, HUNGER)
-                    setStats(-10, 0,MOOD)
-
+                    if(profile.steps>0){
+                        step()
+                        moneyPlus()
+                        progressUp()
+                        setStats(-10, 0, HEALTH)
+                        setStats(-10, 0, HUNGER)
+                        setStats(-10, 0,MOOD)
+                    }else {step()
+                        Toast.makeText(this,"Нет ходов", Toast.LENGTH_LONG).show()}
                 }
             }
         }
@@ -174,15 +220,29 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
         editor.apply()
         saveStats()
+        Log.i("MYTAG", "onStop")
+        startMyService()
         super.onStop()
     }
 
     override fun onDestroy() {
+        unregisterReceiver(br)
+        Log.i("MYTAG", "рессивер отключен")
+        Log.i("MYTAG", "onDestroy")
+        startMyService()
         super.onDestroy()
+
+    }
+
+    fun startMyService (){
+        val intent=Intent(this,MyService::class.java)
+        startService(intent)
     }
 
 
     override fun onResume() {
+        Log.i("MYTAG", "onResume")
+        startMyService()
         super.onResume()
         loadMoney()
     }

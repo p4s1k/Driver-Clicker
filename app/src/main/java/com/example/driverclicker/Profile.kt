@@ -9,5 +9,6 @@ class Profile(
     var step: Int,
     var health: Int,
     var hunger: Int,
-    var mood: Int
+    var mood: Int,
+    var steps: Int
 )  {}
