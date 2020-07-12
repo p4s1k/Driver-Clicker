@@ -20,7 +20,7 @@ class MyService : Service() {
     }
 
     fun check(){
-        if(pref.getInt("servicestep",0)<5){
+        if(pref.getInt("servicestep",0)<250){
             reload()
         }else stopSelf()
     }

@@ -26,7 +26,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
     val MOOD = "mood"
     val SERVICESTEP = "servicestep"
     lateinit var pref: SharedPreferences
-    val profile = Profile(0, "pizza", 1, 0, 0, 800, 100, 100, 100, 5 )
+
+    val profile = Profile(0, "newspaper", 1, 0, 0, 800, 100, 100, 100, 250 )
 
     var br: BroadcastReceiver? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,7 +102,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         }
     }
 
-    fun loadSteps(){profile.steps = pref.getInt(SERVICESTEP,5)}
+    fun loadSteps(){profile.steps = pref.getInt(SERVICESTEP,250)}
     fun setStep(){text_step.text=profile.steps.toString()
     Log.i("MYTAG", "Отрисовывает ${profile.steps}")}
 
@@ -128,20 +129,32 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
         }
     }
     private fun checkProfession(){
-        profile.profession= pref.getString(PROFESSION, "a").toString()
+        profile.profession= pref.getString(PROFESSION, "newspaper").toString()
         when (profile.profession) {
-            "pizza" -> {
-                image_profession_build.setImageResource(R.drawable.pizza_build)
-                main_activity.setBackgroundResource(R.drawable.background_day)
+            "newspaper"->{
+                image_car.setImageResource(R.drawable.newspaper)
                 profile.income=1
+            }
+            "post"->{
+                image_car.setImageResource(R.drawable.bicycle)
+                profile.income=2
+            }
+            "sushi"->{
+                image_car.setImageResource(R.drawable.civic)
+                profile.income=4
+            }
+            "pizza" -> {
+                image_car.setImageResource(R.drawable.bicycle)
+                profile.income=5
 
 
             }
             "taxi" -> {
                 image_profession_build.setImageResource(R.drawable.club_build)
                 main_activity.setBackgroundResource(R.drawable.background_dark)
-                profile.income=2
+                profile.income=6
             }
+
         }
     }
     fun changeProfession(p:String){
@@ -179,6 +192,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 //        editor.putInt(MONEY, profile.money)
 //        editor.apply()
     }
+    fun moneyMinus(count:Int){
+        profile.money-=count
+        text_money.text="Деньги "+profile.money.toString()
+    }
     @SuppressLint("SetTextI18n")
 
     fun progressUp(){
@@ -212,14 +229,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener{
 
     override fun onStop() {
         val editor=pref.edit()
+
         editor.putInt(MONEY, profile.money)
         editor.putString(PROFESSION, profile.profession)
         editor.putInt(LVL, profile.lvl)
         editor.putInt(SKILL, profile.skill)
         editor.putInt(STEP, profile.step)
-
         editor.apply()
+
         saveStats()
+
         Log.i("MYTAG", "onStop")
         startMyService()
         super.onStop()

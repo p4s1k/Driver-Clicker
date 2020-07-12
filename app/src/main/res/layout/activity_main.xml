@@ -7,7 +7,7 @@
     android:id="@+id/main_activity"
     tools:context=".MainActivity"
     android:orientation="vertical"
-    android:background="@drawable/background_day">
+    android:background="@drawable/background_newspaper">
 
     <ProgressBar
         android:id="@+id/steps_bar"
@@ -49,15 +49,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout="@layout/fragment_status_panel" />
+
     <ImageView
         android:id="@+id/image_profession_build"
         android:layout_width="360dp"
-        android:layout_height="240dp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="150dp"
+        app:layout_constraintBottom_toTopOf="@+id/action_panel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/status_bar" />
 
     <ImageView
         android:id="@+id/image_car"
@@ -68,7 +68,7 @@
         android:layout_marginBottom="10dp"
         android:contentDescription="@string/todo"
         android:soundEffectsEnabled="false"
-        android:src="@drawable/civic"
+        android:src="@drawable/newspaper"
         app:layout_constraintBottom_toTopOf="@+id/action_panel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
