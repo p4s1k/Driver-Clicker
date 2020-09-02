@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/main_activity"
-    tools:context=".MainActivity"
+    tools:context=".mainActivity.MainActivity"
     android:orientation="vertical"
     android:background="@drawable/background_newspaper">
 
     <ProgressBar
-        android:id="@+id/steps_bar"
+        android:id="@+id/moves_bar"
         android:max="10"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         android:progressTint="@color/colorAccent"
@@ -18,10 +19,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_step" />
+        app:layout_constraintTop_toBottomOf="@+id/text_movesValue" />
 
     <TextView
-        android:id="@+id/text_step"
+        android:id="@+id/text_movesValue"
         android:background="@color/colorAccent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,7 +33,7 @@
 
     <fragment
         android:id="@+id/action_panel"
-        android:name="com.example.driverclicker.ActionPanelFragment"
+        android:name="com.example.driverclicker.mainActivity.fragments.actionPanel.ActionPanelFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +43,7 @@
 
     <fragment
         android:id="@+id/status_bar"
-        android:name="com.example.driverclicker.FragmentStatusPanel"
+        android:name="com.example.driverclicker.mainActivity.fragments.statusPanel.StatusPanelFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,12 +68,22 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:contentDescription="@string/todo"
+        android:scaleType="fitEnd"
         android:soundEffectsEnabled="false"
         android:src="@drawable/newspaper"
         app:layout_constraintBottom_toTopOf="@+id/action_panel"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_profession_build" />
+        app:layout_constraintTop_toBottomOf="@+id/status_bar" />
+
+    <Button
+        android:id="@+id/button_restart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="RESTART"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/status_bar" />
 
     <FrameLayout
         android:id="@+id/frame_layout"
@@ -81,23 +92,8 @@
         app:layout_constraintBottom_toTopOf="@+id/action_panel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/status_bar" />
+        app:layout_constraintTop_toBottomOf="@+id/status_bar">
 
-    <!--    <Button-->
-<!--        android:id="@+id/taxi"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Button"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/image_car" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/pizza"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Button"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/image_car" />-->
-
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
