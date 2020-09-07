@@ -32,6 +32,7 @@ class MainActivityPresenter(override val repository: LocalRepository, val view: 
             setStats(-10, 0, HEALTH)
             setStats(-10, 0, HUNGER)
             setStats(-10, 0, MOOD)
+            checkLose()
         } else {
             move()
             showToast("Нет ходов")
@@ -48,9 +49,22 @@ class MainActivityPresenter(override val repository: LocalRepository, val view: 
 
     //load stats out of SP to Profile
     fun loadStats() {
-        showProgress(repository.getInt(SAVE, HEALTH, 100), R.id.health_bar)
-        showProgress(repository.getInt(SAVE, HUNGER, 100), R.id.hunger_bar)
-        showProgress(repository.getInt(SAVE, MOOD, 100), R.id.mood_bar)
+        val array= mapOf(HEALTH to R.id.health_bar , HUNGER to R.id.hunger_bar, MOOD to R.id.mood_bar)
+        for(i in array){
+            showProgress(repository.getInt(SAVE, i.key, 100), i.value)
+            checkLose(i.key)}
+    }
+
+    private fun checkLose(statsName: String) {
+        val i= repository.getInt(SAVE,"alert$statsName", 6)
+        if(i==6)return
+        var move = "хода"
+        if (i>4) move="ходов" else if (i<2) move = "ход"
+        when(statsName){
+            HEALTH->{showText("!$i $move!", R.id.health_alert_text )}
+            HUNGER->{showText("!$i $move!", R.id.hunger_alert_text )}
+            MOOD ->{showText("!$i $move!", R.id.mood_alert_text )}
+        }
     }
 
 
@@ -58,7 +72,11 @@ class MainActivityPresenter(override val repository: LocalRepository, val view: 
         return repository.getInt(SAVE, INCOME, 1)
     }
 
-//    fun saveIncome(int: Int) {
-//        repository.saveInt(SAVE, INCOME, int)
-//    }
+    fun start() {
+        changeProfession() //check Profession проверяет профу и
+        progressCheck()   //check Progress (level)
+        showMoney()
+        loadStats()     //load Stats out of SPe
+        showMoveValue()     //set steps to View
+    }
 }

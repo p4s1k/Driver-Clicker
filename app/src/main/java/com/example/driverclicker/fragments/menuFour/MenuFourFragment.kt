@@ -24,7 +24,7 @@ class MenuFourFragment: Fragment(), MenuFourView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.menu4, container, false)
+        return inflater.inflate(R.layout.fragment_menu4, container, false)
     }
 
     @SuppressLint("WrongConstant")
@@ -82,6 +82,9 @@ class MenuFourFragment: Fragment(), MenuFourView {
 
     override fun changeImageCarMain(carImageResource: Int) {
         activity?.image_car?.setImageResource(carImageResource)
+    }
+
+    override fun resetLose(id: Int) {
     }
 
 }

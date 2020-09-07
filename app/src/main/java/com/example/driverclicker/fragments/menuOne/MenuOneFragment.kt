@@ -13,9 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.driverclicker.R
-import com.example.driverclicker.basic.ViewBasic
 import com.example.driverclicker.fragments.recyclerViews.RecyclerViewAdapterStatus
-import com.example.driverclicker.fragments.recyclerViews.data.StatusDataModel
 import com.example.driverclicker.repository.LocalRepository
 import com.example.driverclicker.service.MyService
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,7 +24,7 @@ class MenuOneFragment: Fragment(), View.OnClickListener, MenuOneView {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {return inflater.inflate(R.layout.menu1, container, false)}
+    ): View? {return inflater.inflate(R.layout.fragment_menu1, container, false)}
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val repository = LocalRepository
@@ -77,7 +75,6 @@ class MenuOneFragment: Fragment(), View.OnClickListener, MenuOneView {
 
     override fun closeFragment() {
         activity?.supportFragmentManager?.popBackStack()
-//        activity?.supportFragmentManager?.beginTransaction()?.remove(this)?.commit()
     }
 
     override fun changeBackgroundMain(backgroundResource: Int) {
@@ -86,5 +83,9 @@ class MenuOneFragment: Fragment(), View.OnClickListener, MenuOneView {
 
     override fun changeImageCarMain(carImageResource: Int) {
         activity?.image_car?.setImageResource(carImageResource)
+    }
+
+    override fun resetLose(id: Int) {
+        activity?.findViewById<TextView>(id)?.text=""
     }
 }

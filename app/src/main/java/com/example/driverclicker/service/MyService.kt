@@ -1,16 +1,12 @@
 package com.example.driverclicker.service
 
-import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.CountDownTimer
 import android.os.IBinder
 import android.util.Log
-import android.widget.ProgressBar
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MyService : Service() {
@@ -27,7 +23,7 @@ class MyService : Service() {
     }
 
     private fun reload(){
-        var progress: Int =0
+        var progress =0
         val b="com.example.driverclicker"
         val intent = Intent(b)
         object : CountDownTimer(10100, 1000) {
@@ -50,6 +46,8 @@ class MyService : Service() {
             }
 
             override fun onFinish() {
+                intent.putExtra("step", 0)
+                sendBroadcast(intent)
                 check()
                 Log.i("MYTAG", "Таймер закончился")
             }

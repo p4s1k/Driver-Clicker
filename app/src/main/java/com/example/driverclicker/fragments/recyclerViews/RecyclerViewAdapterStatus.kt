@@ -11,22 +11,22 @@ import com.example.driverclicker.R
 import com.example.driverclicker.fragments.recyclerViews.data.StatusDataModel
 
 //RV for MenuOne/Two/Three()
-class RecyclerViewAdapterStatus(val statuslist: ArrayList<StatusDataModel>): RecyclerView.Adapter<RecyclerViewAdapterStatus.ViewHolder>() {
+class RecyclerViewAdapterStatus(private val statusList: ArrayList<StatusDataModel>): RecyclerView.Adapter<RecyclerViewAdapterStatus.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        var View = LayoutInflater.from(parent.context).inflate(R.layout.items, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.items, parent, false)
         return ViewHolder(
-            View
+            view
         )
     }
 
     override fun getItemCount(): Int {
-        return statuslist.size
+        return statusList.size
     }
 
 
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var status: StatusDataModel = statuslist[position]
+        val status: StatusDataModel = statusList[position]
         holder.tittle.text=status.tittle
         holder.desc.text=status.desc
         if (!status.achieved){

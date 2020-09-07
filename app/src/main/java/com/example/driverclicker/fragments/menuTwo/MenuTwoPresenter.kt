@@ -101,6 +101,7 @@ class MenuTwoPresenter(view: MenuTwoView, repository: RepositoryInt) :
 
             } else showToast("Недостаточно денег")
         } else showToast("Недоступно")
+        checkLose()
     }
 
 //    private fun moneyShow() {

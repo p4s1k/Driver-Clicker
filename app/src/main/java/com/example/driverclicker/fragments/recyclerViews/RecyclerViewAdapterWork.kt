@@ -17,8 +17,8 @@ class RecyclerViewAdapterWork(val workList: ArrayList<WorkDataModel>) :
     RecyclerView.Adapter<RecyclerViewAdapterWork.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val View = LayoutInflater.from(parent.context).inflate(R.layout.items, parent, false)
-        return ViewHolder(View)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.items, parent, false)
+        return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {
@@ -33,10 +33,10 @@ class RecyclerViewAdapterWork(val workList: ArrayList<WorkDataModel>) :
     }
 
     inner class ViewHolder(item: View) : RecyclerView.ViewHolder(item) {
-        var tittle: TextView = item.findViewById(R.id.cardTittle)
+        private var tittle: TextView = item.findViewById(R.id.cardTittle)
         var desc: TextView = item.findViewById(R.id.cardDescription)
-        var icon: ImageView = item.findViewById(R.id.itemImage_work)
-        var access: androidx.cardview.widget.CardView = item.findViewById(R.id.cardViewWork)
+        private var icon: ImageView = item.findViewById(R.id.itemImage_work)
+        private var access: androidx.cardview.widget.CardView = item.findViewById(R.id.cardViewWork)
         fun show(workListElement: WorkDataModel, position: Int) {
 
             tittle.text = workListElement.tittle

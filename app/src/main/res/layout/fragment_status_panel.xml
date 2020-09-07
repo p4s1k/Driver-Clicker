@@ -8,6 +8,33 @@
     android:background="#efede2"
     >
 
+    <TextView
+        android:id="@+id/mood_alert_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        app:layout_constraintBottom_toTopOf="@+id/mood_bar"
+        app:layout_constraintEnd_toEndOf="@+id/mood_bar"
+        app:layout_constraintStart_toEndOf="@+id/mood_icon_top" />
+
+    <TextView
+        android:id="@+id/hunger_alert_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        app:layout_constraintBottom_toTopOf="@+id/hunger_bar"
+        app:layout_constraintEnd_toStartOf="@+id/mood_icon_top"
+        app:layout_constraintStart_toEndOf="@+id/hunger_icon_top" />
+
+    <TextView
+        android:id="@+id/health_alert_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FF0000"
+        app:layout_constraintBottom_toTopOf="@+id/health_bar"
+        app:layout_constraintEnd_toStartOf="@+id/hunger_icon_top"
+        app:layout_constraintStart_toEndOf="@+id/heart_icon_top" />
+
     <ImageView
         android:id="@+id/heart_icon_top"
         android:layout_width="0dp"
@@ -28,7 +55,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/heart_icon_top"
         app:layout_constraintEnd_toStartOf="@+id/hunger_bar"
         app:layout_constraintStart_toEndOf="@+id/health_bar"
-        app:layout_constraintTop_toTopOf="@+id/heart_icon_top" />
+        app:layout_constraintTop_toTopOf="@+id/heart_icon_top"
+        android:contentDescription="TODO" />
 
     <ImageView
         android:id="@+id/mood_icon_top"
@@ -65,15 +93,13 @@
     <ProgressBar
         android:id="@+id/experience_bar"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-
+        android:progressDrawable="@drawable/custom_skill_bar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="10dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="10dp"
         android:max="80000"
-        android:progressBackgroundTint="@color/colorPrimaryDark"
-        android:progressTint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/text_lvl"
@@ -83,7 +109,7 @@
     <ProgressBar
         android:id="@+id/health_bar"
         style="?android:attr/progressBarStyleHorizontal"
-        android:progressDrawable="@drawable/customstatusbar"
+        android:progressDrawable="@drawable/custom_health_bar"
         android:layout_width="0dp"
         android:layout_height="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/heart_icon_top"
@@ -93,8 +119,9 @@
     <ProgressBar
         android:id="@+id/hunger_bar"
         style="?android:attr/progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/custom_hunger_bar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/hunger_icon_top"
         app:layout_constraintEnd_toStartOf="@+id/mood_icon_top"
         app:layout_constraintStart_toEndOf="@+id/hunger_icon_top"
@@ -103,8 +130,9 @@
     <ProgressBar
         android:id="@+id/mood_bar"
         style="?android:attr/progressBarStyleHorizontal"
+        android:progressDrawable="@drawable/custom_mood_bar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="10dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/mood_icon_top"
         app:layout_constraintEnd_toEndOf="parent"

@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.driverclicker.R
 import com.example.driverclicker.fragments.recyclerViews.RecyclerViewAdapterStatus
-import com.example.driverclicker.fragments.recyclerViews.data.StatusDataModel
 import com.example.driverclicker.repository.LocalRepository
 import com.example.driverclicker.service.MyService
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,7 +24,7 @@ class MenuThreeFragment: Fragment(),MenuThreeView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.menu3, container, false)
+        return inflater.inflate(R.layout.fragment_menu3, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -81,5 +80,12 @@ class MenuThreeFragment: Fragment(),MenuThreeView {
 
     override fun changeImageCarMain(carImageResource: Int) {
         activity?.image_car?.setImageResource(carImageResource)
+    }
+
+    override fun closeFragment() {
+        activity?.supportFragmentManager?.popBackStack()
+    }
+    override fun resetLose(id: Int) {
+        activity?.findViewById<TextView>(id)?.text=""
     }
 }

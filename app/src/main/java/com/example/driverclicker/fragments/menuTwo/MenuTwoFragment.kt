@@ -24,7 +24,7 @@ class MenuTwoFragment: Fragment(), View.OnClickListener, MenuTwoView {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? { return inflater.inflate(R.layout.menu2, container, false) }
+    ): View? { return inflater.inflate(R.layout.fragment_menu2, container, false) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val repository= LocalRepository
@@ -82,5 +82,12 @@ class MenuTwoFragment: Fragment(), View.OnClickListener, MenuTwoView {
 
     override fun changeImageCarMain(carImageResource: Int) {
         activity?.image_car?.setImageResource(carImageResource)
+    }
+
+    override fun closeFragment() {
+        activity?.supportFragmentManager?.popBackStack()
+    }
+    override fun resetLose(id: Int) {
+        activity?.findViewById<TextView>(id)?.text=""
     }
 }

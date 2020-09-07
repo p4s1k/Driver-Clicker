@@ -1,9 +1,8 @@
+@file:Suppress("PropertyName", "MemberVisibilityCanBePrivate")
+
 package com.example.driverclicker.basic
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.app.ActivityManager
-import android.content.Context
 import android.util.Log
 import com.example.driverclicker.R
 import com.example.driverclicker.enums.ProfessionsEnum
@@ -67,6 +66,11 @@ abstract class PresenterBasic(open val repository: RepositoryInt, open val viewB
             saveLevel(level)
         }
         saveSkill(skill)
+        if (loadLevel()==80)win()
+    }
+
+    private fun win() {
+        //победа
     }
 
     //progress check logic. load out of SP, set to Profile and set to View
@@ -167,10 +171,13 @@ abstract class PresenterBasic(open val repository: RepositoryInt, open val viewB
     fun setStats(minValue: Int, maxValue: Int, statsName: String) {
         val countResult = (minValue..maxValue).random()
         var statValue = repository.getInt(SAVE, statsName, 100)
+        val a =statValue
         statValue+=countResult
-        if(statValue<0) {
+        if (a==0 && statValue>0) resetLose(statsName)
+        if(statValue<=0) {
             statValue=0
             viewBasic.closeFragment()
+            alertLose(statsName)
         }
         if (statValue>100) statValue=100
         when(statsName){
@@ -179,28 +186,69 @@ abstract class PresenterBasic(open val repository: RepositoryInt, open val viewB
             MOOD->viewBasic.showProgress(statValue,R.id.mood_bar)
         }
         repository.saveInt(SAVE, statsName, statValue)
+
     }
+
+    private fun alertLose(statsName: String){
+        var i= repository.getInt(SAVE,"alert$statsName", 6)
+        i--
+        var move = "хода"
+        if (i>4) move="ходов" else if (i<2) move = "ход"
+        when(statsName){
+            HEALTH->{showText(" !$i $move!", R.id.health_alert_text )}
+            HUNGER->{showText("!$i $move!", R.id.hunger_alert_text )}
+            MOOD ->{showText("!$i $move!", R.id.mood_alert_text )}
+        }
+        repository.saveInt(SAVE, "alert$statsName", i)
+    }
+
 
     fun showMoney() {
         showText("Деньги ${loadMoney()}", R.id.text_money)
     }
 
-    private fun restart (){
+    private fun resetLose(statsName: String){
+        repository.saveInt(SAVE, "alert$statsName", 6)
+        when(statsName){
+            HEALTH->(viewBasic.resetLose(R.id.health_alert_text))
+            HUNGER->(viewBasic.resetLose(R.id.hunger_alert_text))
+            MOOD->(viewBasic.resetLose(R.id.mood_alert_text))
+        }
+    }
+
+    fun checkLose() {
+        val a= arrayOf(HEALTH, HUNGER, MOOD)
+        for (i in a){
+            if (repository.getInt(SAVE, "alert$i",6)<1){
+                restart()
+                return
+            }
+        }
+    }
+
+    fun restart (){
         repository.clearRepository()
         showMoveValue()
         viewBasic.closeFragment()
-//        checkProfession()
+        changeProfession()
         loadMoveValue()
         progressCheck()
         loadStats()
         showMoney()
+        resetLose(HEALTH)
+        resetLose(HUNGER)
+        resetLose(MOOD)
+        showToast("ВЫ ПРОИГРАЛИ!")
     }
 
     private fun loadStats() {
-        showProgress(repository.getInt(SAVE, HEALTH, 100), R.id.health_bar)
-        showProgress(repository.getInt(SAVE, HUNGER, 100), R.id.hunger_bar)
-        showProgress(repository.getInt(SAVE, MOOD, 100), R.id.mood_bar)
+        val array= mapOf(HEALTH to R.id.health_bar , HUNGER to R.id.hunger_bar, MOOD to R.id.mood_bar)
+        for(i in array){
+            showProgress(repository.getInt(SAVE, i.key, 100), i.value)
+            checkLose()}
     }
+
+
 
     fun changeProfession(){
         val enum=repository.getString(SAVE, PROFESSION, ProfessionsEnum.Newspaper.name)

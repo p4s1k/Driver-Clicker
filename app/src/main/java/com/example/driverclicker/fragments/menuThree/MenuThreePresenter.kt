@@ -102,5 +102,6 @@ class MenuThreePresenter(view: ViewBasic, repository: RepositoryInt) :
 
             } else showToast("Недостаточно денег")
         } else showToast("Недоступно")
+        checkLose()
     }
 }

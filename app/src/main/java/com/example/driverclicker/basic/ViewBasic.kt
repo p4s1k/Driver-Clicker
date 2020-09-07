@@ -9,4 +9,5 @@ interface ViewBasic {
     fun closeFragment(){}
     fun changeBackgroundMain(backgroundResource: Int)
     fun changeImageCarMain(carImageResource: Int)
+    fun resetLose(id: Int)
 }

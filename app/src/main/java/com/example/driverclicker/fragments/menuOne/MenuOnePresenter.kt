@@ -77,8 +77,7 @@ class MenuOnePresenter(override val viewBasic: ViewBasic, override val repositor
                 Health5.price,
                 Health5.action)
         )
-        val achievedCount= repository.getInt(STATS, HEALTH, 0
-        )
+        val achievedCount= repository.getInt(STATS, HEALTH, 0)
         for(i in 0..achievedCount ) healthList[i].achieved=true
         return healthList
     }
@@ -99,5 +98,6 @@ class MenuOnePresenter(override val viewBasic: ViewBasic, override val repositor
                 showMoney()
             } else showToast("Недостаточно денег")
         }else showToast("Недоступно")
+        checkLose()
     }
 }
