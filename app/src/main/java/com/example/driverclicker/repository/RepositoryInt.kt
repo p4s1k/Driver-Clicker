@@ -7,5 +7,7 @@ interface RepositoryInt {
     fun saveInt(fileName: String, key: String, value: Int)
     fun getBoolean(fileName: String, key: String, defValue: Boolean): Boolean
     fun saveBoolean(fileName: String, key: String, value: Boolean)
+    fun getLong(fileName: String, key: String, defValue: Long): Long
+    fun saveLong(fileName: String, key: String, value: Long)
     fun clearRepository()
 }

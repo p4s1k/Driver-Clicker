@@ -22,12 +22,12 @@
             
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/itemImage_work"
-                android:src="@drawable/item_icon"
+                android:src="@drawable/icon_phone"
                 android:layout_margin="5dp"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 app:civ_border_width="1dp"
-                app:civ_border_color="#ff00ff"/>
+                app:civ_border_color="#000000"/>
             
         
         <LinearLayout

@@ -1,14 +1,17 @@
 package com.example.driverclicker.fragments.menuFour
 
+import com.example.driverclicker.R
 import com.example.driverclicker.basic.PresenterBasic
+import com.example.driverclicker.enums.StatsEnum
 import com.example.driverclicker.fragments.recyclerViews.data.WorkDataModel
 import com.example.driverclicker.repository.RepositoryInt
 import com.example.driverclicker.enums.UpgradeEnum
 
 class MenuFourPresenter(val view: MenuFourView, override val repository: RepositoryInt) :
     PresenterBasic(repository, view) {
-    private var worksList = ArrayList<WorkDataModel>()
-    fun initData(): ArrayList<WorkDataModel> {
+    private var worksList = mutableListOf<WorkDataModel>()
+
+    fun initData(): MutableList<WorkDataModel> {
         for (i in UpgradeEnum.values()){
             worksList.add(
                 WorkDataModel(
@@ -38,20 +41,28 @@ class MenuFourPresenter(val view: MenuFourView, override val repository: Reposit
     //check choose logic.
     fun checkChoose(position: Int) {
         // если получено, то выходим и отправляем сообщение
-        if (worksList[position].achieved) return showToast("Уже получено")
+        if (worksList[position].achieved) return showToast(R.string.msg_polucheno)
         //если нет:
-        var accessText = "Требуется: \n"
+
+        var accessText = mutableMapOf<String, Int>()
+        accessText["1"] = R.string.accessText_need
         var accessLevel = false
         var accessMoney = false
         val price = worksList[position].price
         val level = worksList[position].level
-        if (position != 0) if (!worksList[position - 1].achieved) accessText += worksList[position - 1].tittle   //открыт ли апгрейд
+        if (position != 0) if (!worksList[position - 1].achieved) accessText ["2"] = worksList[position - 1].tittle   //открыт ли апгрейд
         if (repository.getInt(SAVE, LVL, 0) >= level) {
             accessLevel = true
-        } else accessText += "\n$level уровень" //подходит ли уровень
+        } else {
+            accessText["3"] = level
+            accessText["4"] = R.string.accessText_lvl
+        } //подходит ли уровень
         if (repository.getInt(SAVE, MONEY, 0) >= price) {
             accessMoney = true
-        } else accessText += "\n$price рублей"  //хватает ли денег
+        } else{
+            accessText["5"]= price
+            accessText["6"]= R.string.accessText_rubels
+        }  //хватает ли денег
 
         //исход событий в зависимостий при доступном или недоступном разрешении
         if (position != 0) {
@@ -65,24 +76,32 @@ class MenuFourPresenter(val view: MenuFourView, override val repository: Reposit
 
     // Good logic.
     private fun good(position: Int) {                   //если все проверки пройдены
+
+        val list = mutableListOf<Int>(R.string.priobreteno, worksList[position].tittle)
+
         moneyMinus(worksList[position].price)                // отнимаем деньги
         showMoney()
         repository.saveBoolean(ACCESS, worksList[position].name, true)
-        var upgradeText = ""
+//        var upgradeText = 0
         if (worksList[position].type == PROFESSION) {
             changeProfession(worksList[position].openestUpgrade)     //если профессия, то поменять
         } else {
             //если апгрейд
             repository.saveInt(STATS, worksList[position].type, repository.getInt(STATS, worksList[position].type,0)+1)
-            if (worksList[position].openestUpgrade!="")upgradeText += "\nОткрыто\n\"${worksList[position].openestUpgrade}\""
+            if (worksList[position].openestUpgrade!=""){
+                list.add(R.string.upgradeOpen)
+                list.add(StatsEnum.valueOf(worksList[position].openestUpgrade).title)
+            }
         }
-        showToast("Приобретено ${worksList[position].tittle} $upgradeText")       //в конце выводит сообщение о приобритении
-        view.close() //закрыть фрагмент
+//        showToast("Приобретено ${worksList[position].tittle} $upgradeText")       //в конце выводит сообщение о приобритении
+        showToast(list)       //в конце выводит сообщение о приобритении
+        view.closeFragment() //закрыть фрагмент
         changeProfession()
     }
 
     //bad logic.
-    private fun bad(accessText: String) {
+    private fun bad(accessText: MutableMap<String, Int>) {
+        accessText.toMap()
         showToast(accessText)
     } //если проверки не пройдены, то выводит об этом сообщение
 }

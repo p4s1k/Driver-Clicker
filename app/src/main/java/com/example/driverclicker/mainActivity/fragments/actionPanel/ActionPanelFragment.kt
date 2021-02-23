@@ -55,7 +55,12 @@ class ActionPanelFragment: Fragment(), View.OnClickListener {
         val ac=activity
         val sup= ac?.supportFragmentManager
         if(ac!=null){
-            if(sup?.findFragmentByTag("container")==null)fragmentContainerCrate()
+            if(sup?.findFragmentByTag("container")==null){
+                fragmentContainerCrate()
+            } else if (sup.findFragmentByTag(tag)!=null) {
+                sup.popBackStack()
+                return
+            }
             ac.supportFragmentManager
                 .beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .replace(R.id.fragment_container, fragment, tag)

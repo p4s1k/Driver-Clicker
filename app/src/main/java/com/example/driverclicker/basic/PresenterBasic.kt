@@ -6,10 +6,17 @@ import android.annotation.SuppressLint
 import android.util.Log
 import com.example.driverclicker.R
 import com.example.driverclicker.enums.ProfessionsEnum
+import com.example.driverclicker.enums.Progress
+import com.example.driverclicker.enums.Progress.*
+import com.example.driverclicker.repository.Ads
 import com.example.driverclicker.repository.RepositoryInt
+import com.google.android.gms.ads.rewarded.RewardItem
+import com.google.android.gms.ads.rewarded.RewardedAdCallback
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+
 
 //(open val repository:RepositoryInt, open val view: MenuOneTwoThreeView)
-abstract class PresenterBasic(open val repository: RepositoryInt, open val viewBasic: ViewBasic) {
+open class PresenterBasic(open val repository: RepositoryInt, open val viewBasic: ViewBasic) {
     val SAVE = "save"//FileName SP
     val STATS = "stats"
 
@@ -32,7 +39,7 @@ abstract class PresenterBasic(open val repository: RepositoryInt, open val viewB
     }
 
     //step logic. -Profile, Save in SP, setStep(), ProgressUP() and start Service
-    fun move() {
+    fun move(boolean: Boolean) {
         if (checkMovesValue()) {
             var moveValue = loadMoveValue()
             Log.i("MYTAG", "move() получил $moveValue")
@@ -40,7 +47,7 @@ abstract class PresenterBasic(open val repository: RepositoryInt, open val viewB
             saveMoveValue(moveValue)
             Log.i("MYTAG", "move() отнял шаг и сохранил $moveValue")
             showMoveValue()
-            progressUp()
+            if (boolean) progressUp()
         }
         viewBasic.startService()
     }
@@ -56,8 +63,8 @@ abstract class PresenterBasic(open val repository: RepositoryInt, open val viewB
         if (viewBasic.checkProgressMax(viewPb)) {
             var level = loadLevel()
             level += 1
-            if (step > 250) {
-                step -= 10
+            if (step > Stop.value) {
+                step -= Subtract.value
                 saveStep(step)
             }
             skill = 0
@@ -66,7 +73,7 @@ abstract class PresenterBasic(open val repository: RepositoryInt, open val viewB
             saveLevel(level)
         }
         saveSkill(skill)
-        if (loadLevel()==80)win()
+        if (loadLevel() == 80) win()
     }
 
     private fun win() {
@@ -101,7 +108,7 @@ abstract class PresenterBasic(open val repository: RepositoryInt, open val viewB
     }
 
     private fun loadStep(): Int {
-        return repository.getInt(SAVE, STEP, 800)
+        return repository.getInt(SAVE, STEP, Step.value)
     }
 
     private fun saveStep(int: Int) {
@@ -119,17 +126,49 @@ abstract class PresenterBasic(open val repository: RepositoryInt, open val viewB
 
     //set steps in View of Profile
     fun showMoveValue() {
-        val moveValue = repository.getInt(SAVE, SERVICESTEP, 250).toString()
-        viewBasic.showText(moveValue, R.id.text_movesValue)
+        val moveValue = repository.getInt(SAVE, SERVICESTEP, 250)
+        viewBasic.showText(moveValue.toString(), R.id.text_movesValue)
         Log.i("MYTAG", "showMoveValue() Отрисовывает $moveValue")
+        if (moveValue <= Progress.ServiceValueForShowImage.value) showMoveAdImageVisibility()
+    }
+
+
+    private fun showMoveAdImageVisibility() {
+        if (!viewBasic.isMoveAdVisibility()) {
+            viewBasic.changeMoveAdImageVisibility(true)
+        }
     }
 
     fun showText(str: String, viewId: Int) {
         viewBasic.showText(str, viewId)
     }
 
-    fun showToast(str: String) {
-        viewBasic.showToast(str)
+
+    fun showToast(stringResourceValue: Int) {
+        viewBasic.showToast(stringResourceValue)
+    }
+
+    fun showToast(list: List<Int>) {
+        var str = ""
+        list.forEach {
+            str += it
+        }
+        viewBasic.showToast(list)
+    }
+
+    fun showToast(map: Map<String, Int>) {
+
+//        var str=""
+//
+//        for(a in 0..map.size){
+//            if (map.containsKey("$a")){
+//                if (a==3 || a==5){
+//                    str+=map[a].toString()
+//                }
+//                str+=map[a]
+//            }
+//        }
+        viewBasic.showToast(map)
     }
 
     fun loadMoney(): Int {
@@ -162,42 +201,43 @@ abstract class PresenterBasic(open val repository: RepositoryInt, open val viewB
         var money = repository.getInt(SAVE, MONEY, 0)
         money -= count
         repository.saveInt(SAVE, MONEY, money)
-
-//        profile.money-=count
-//        text_money.text="Деньги "+profile.money.toString()
     }
 
     //change stat in Profile and set in View
     fun setStats(minValue: Int, maxValue: Int, statsName: String) {
         val countResult = (minValue..maxValue).random()
         var statValue = repository.getInt(SAVE, statsName, 100)
-        val a =statValue
-        statValue+=countResult
-        if (a==0 && statValue>0) resetLose(statsName)
-        if(statValue<=0) {
-            statValue=0
-            viewBasic.closeFragment()
+        val a = statValue
+        statValue += countResult
+        if (a == 0 && statValue > 0) resetLose(statsName)
+        if (statValue <= 0) {
+            statValue = 0
             alertLose(statsName)
         }
-        if (statValue>100) statValue=100
-        when(statsName){
-            HEALTH->viewBasic.showProgress(statValue,R.id.health_bar)
-            HUNGER->viewBasic.showProgress(statValue,R.id.hunger_bar)
-            MOOD->viewBasic.showProgress(statValue,R.id.mood_bar)
+        if (statValue > 100) statValue = 100
+        when (statsName) {
+            HEALTH -> viewBasic.showProgress(statValue, R.id.health_bar)
+            HUNGER -> viewBasic.showProgress(statValue, R.id.hunger_bar)
+            MOOD -> viewBasic.showProgress(statValue, R.id.mood_bar)
         }
         repository.saveInt(SAVE, statsName, statValue)
-
     }
 
-    private fun alertLose(statsName: String){
-        var i= repository.getInt(SAVE,"alert$statsName", 6)
+    private fun alertLose(statsName: String) {
+        var i = repository.getInt(SAVE, "alert$statsName", 6)
         i--
         var move = "хода"
-        if (i>4) move="ходов" else if (i<2) move = "ход"
-        when(statsName){
-            HEALTH->{showText(" !$i $move!", R.id.health_alert_text )}
-            HUNGER->{showText("!$i $move!", R.id.hunger_alert_text )}
-            MOOD ->{showText("!$i $move!", R.id.mood_alert_text )}
+        if (i > 4 || i == 0) move = "ходов" else if (i < 2) move = "ход"
+        when (statsName) {
+            HEALTH -> {
+                showText(" !$i $move!", R.id.health_alert_text)
+            }
+            HUNGER -> {
+                showText("!$i $move!", R.id.hunger_alert_text)
+            }
+            MOOD -> {
+                showText("!$i $move!", R.id.mood_alert_text)
+            }
         }
         repository.saveInt(SAVE, "alert$statsName", i)
     }
@@ -207,29 +247,30 @@ abstract class PresenterBasic(open val repository: RepositoryInt, open val viewB
         showText("Деньги ${loadMoney()}", R.id.text_money)
     }
 
-    private fun resetLose(statsName: String){
+    private fun resetLose(statsName: String) {
         repository.saveInt(SAVE, "alert$statsName", 6)
-        when(statsName){
-            HEALTH->(viewBasic.resetLose(R.id.health_alert_text))
-            HUNGER->(viewBasic.resetLose(R.id.hunger_alert_text))
-            MOOD->(viewBasic.resetLose(R.id.mood_alert_text))
+        when (statsName) {
+            HEALTH -> (viewBasic.resetLose(R.id.health_alert_text))
+            HUNGER -> (viewBasic.resetLose(R.id.hunger_alert_text))
+            MOOD -> (viewBasic.resetLose(R.id.mood_alert_text))
         }
     }
 
     fun checkLose() {
-        val a= arrayOf(HEALTH, HUNGER, MOOD)
-        for (i in a){
-            if (repository.getInt(SAVE, "alert$i",6)<1){
-                restart()
+        val list = arrayOf(HEALTH, HUNGER, MOOD)
+        for (i in list) {
+            if (repository.getInt(SAVE, "alert$i", 6) < 1) {
+                viewBasic.closeFragment()
+                viewBasic.showAlert()
                 return
             }
         }
     }
 
-    fun restart (){
+    fun restart() {
         repository.clearRepository()
         showMoveValue()
-        viewBasic.closeFragment()
+        viewBasic.stopService()
         changeProfession()
         loadMoveValue()
         progressCheck()
@@ -238,22 +279,89 @@ abstract class PresenterBasic(open val repository: RepositoryInt, open val viewB
         resetLose(HEALTH)
         resetLose(HUNGER)
         resetLose(MOOD)
-        showToast("ВЫ ПРОИГРАЛИ!")
+        viewBasic.closeFragment()
+        showToast(R.string.message_lose)
     }
 
     private fun loadStats() {
-        val array= mapOf(HEALTH to R.id.health_bar , HUNGER to R.id.hunger_bar, MOOD to R.id.mood_bar)
-        for(i in array){
+        val array =
+            mapOf(HEALTH to R.id.health_bar, HUNGER to R.id.hunger_bar, MOOD to R.id.mood_bar)
+        for (i in array) {
             showProgress(repository.getInt(SAVE, i.key, 100), i.value)
-            checkLose()}
+            checkLose()
+        }
     }
 
 
-
-    fun changeProfession(){
-        val enum=repository.getString(SAVE, PROFESSION, ProfessionsEnum.Newspaper.name)
+    fun changeProfession() {
+        val enum = repository.getString(SAVE, PROFESSION, ProfessionsEnum.Newspaper.name)
         viewBasic.changeBackgroundMain(ProfessionsEnum.valueOf(enum).background)
         viewBasic.changeImageCarMain(ProfessionsEnum.valueOf(enum).imageRes)
         repository.saveInt(SAVE, INCOME, ProfessionsEnum.valueOf(enum).income)
+    }
+
+    private val LoseRewardedAdLoadCallBack = object : RewardedAdLoadCallback() {
+        override fun onRewardedAdLoaded() {
+            viewBasic.showToast("rewLoseLoaded")
+        }
+
+        override fun onRewardedAdFailedToLoad(p0: Int) {
+            viewBasic.showToast("rewLoseFailed")
+        }
+    }
+
+    private val LoseRewardedAdCallback = object : RewardedAdCallback() {
+        override fun onUserEarnedReward(p0: RewardItem) {
+            repository.saveInt(SAVE, HEALTH, 50)
+            repository.saveInt(SAVE, HUNGER, 50)
+            repository.saveInt(SAVE, MOOD, 50)
+            viewBasic.showProgress(50, R.id.health_bar)
+            viewBasic.showProgress(50, R.id.hunger_bar)
+            viewBasic.showProgress(50, R.id.mood_bar)
+            resetLose(HEALTH)
+            resetLose(HUNGER)
+            resetLose(MOOD)
+            checkLose()
+        }
+
+        override fun onRewardedAdClosed() {
+            checkLose()
+            createLoseRewardedAd()
+            super.onRewardedAdClosed()
+        }
+
+    }
+
+    fun createLoseRewardedAd() {
+        Ads.loseRewardedAd = Ads.createAndLoadRewardedAd(Ads.loseAdUnit, LoseRewardedAdLoadCallBack)
+    }
+
+    fun createMoveRewardedAd(callback: RewardedAdLoadCallback) {
+        Ads.movesRewardedAd = Ads.createAndLoadRewardedAd(Ads.movesAdUnit, callback)
+    }
+
+    fun tryPositive(): Boolean {
+        return if (Ads.loseRewardedAd.isLoaded) {
+            showLoseRewardedAd()
+            true
+        } else {
+            if (!viewBasic.isNetworkAvailable()) {
+                viewBasic.showToast("проверьте подключение к интернету")
+            } else {
+                viewBasic.showToast("видео не загружено, попробуйте через несколько секунд")
+            }
+            createLoseRewardedAd()
+            false
+        }
+    }
+
+
+    fun showLoseRewardedAd() {
+        viewBasic.showLoseRewardedAd(LoseRewardedAdCallback)
+    }
+
+
+    fun startAlert() {
+        viewBasic.startAlert()
     }
 }

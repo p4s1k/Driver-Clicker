@@ -64,6 +64,25 @@ object LocalRepository : RepositoryApplicationClass(), RepositoryInt {
         }
     }
 
+    override fun getLong(fileName: String, key: String, defValue: Long): Long {
+        var result = defValue
+        when(fileName){
+            SAVE -> result = preferencesSave.getLong(key, defValue)
+            STATS -> result = preferencesStats.getLong(key, defValue)
+            ACCESS -> result = preferencesAccess.getLong(key, defValue)
+        }
+        return result
+    }
+
+    override fun saveLong(fileName: String, key: String, value: Long) {
+        when (fileName) {
+            SAVE -> preferencesSave.edit().putLong(key, value).commit()
+            STATS -> preferencesStats.edit().putLong(key, value).commit()
+            ACCESS -> preferencesAccess.edit().putLong(key, value).commit()
+        }
+    }
+
+
     override fun clearRepository() {
         preferencesSave.edit().clear().apply()
         preferencesStats.edit().clear().apply()
